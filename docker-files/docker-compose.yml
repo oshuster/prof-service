@@ -3,18 +3,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: "filter-service:${VERSION}"
-    container_name: filter-service
+    image: "prof-service:${VERSION}"
+    container_name: prof-service
     ports:
-      - 8182:8182
+      - 8183:8183
     restart: always
     volumes:
       - "/usr/local/servers/filter-service/logs:/app/filter-service/logs"
-      - "/usr/local/servers/filter-service/inputFiles/type:/usr/src/app/inputFiles/type"
-      - "/usr/local/servers/filter-service/inputFiles/katotg:/usr/src/app/inputFiles/katotg"
+      - "/usr/local/servers/filter-service/inputFiles/profXlsx:/usr/src/app/inputFiles/profXlsx"
     environment:
-      PORT: 8182
+      PORT: 8183
       LOG_LEVEL: "info"
       ENVIRONMENT: "PRODUCTION"
-      XLS_TYPE_PATH: "/usr/src/app/inputFiles/type"
-      XLS_KATOTG_PATH: "/usr/src/app/inputFiles/katotg"
+      XLS_PROFESSION_PATH: "/usr/src/app/inputFiles/profXlsx"

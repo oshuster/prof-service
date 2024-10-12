@@ -1,14 +1,14 @@
 FROM node:20.12-alpine3.18
 
 # Додано залежності
-RUN apk update && apk add --no-cache git bash python3 make g++
+RUN apk update && apk add --no-cache git bash
 
-WORKDIR /app/filter-service
+WORKDIR /app/prof-service
 
-RUN git clone -b main https://github.com/oshuster/filter-service.git .
+RUN git clone -b db-postgres https://github.com/oshuster/prof-service.git .
 
 RUN npm install
 
-EXPOSE 8182
+EXPOSE 8183
 
 CMD ["npm", "start"]
