@@ -41,7 +41,9 @@ const webLogger = winston.createLogger({
 // Логування запиту
 export const logRequest = (req, _, next) => {
   const { method, url, body } = req;
-  const message = `[REQUEST >>>] ${method} ${url} ${JSON.stringify(body)}\n\n`;
+  const message = `[REQUEST >>>] ${method}, UUID: ${
+    req.uuid
+  }, ${url} ${JSON.stringify(body)}\n\n`;
   webLogger.info(message);
 
   next();

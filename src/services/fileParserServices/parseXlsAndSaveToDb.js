@@ -6,7 +6,7 @@ import { xlsProfessionsParse } from "./xlsProfessionsParser.js";
 import { logError } from "../../config/logError.js";
 import HttpError from "../../helpers/HttpError.js";
 
-export const parseXlsAndSaveToDb = async (db) => {
+export const parseXlsAndSaveToDb = async (client) => {
   try {
     let xlsProfessionsPath;
 
@@ -24,16 +24,16 @@ export const parseXlsAndSaveToDb = async (db) => {
         `XLS TYPE File Path (Development): ${xlsProfessionsPath}`
       );
 
-      await xlsProfessionsParse(db, xlsProfessionsPath);
+      await xlsProfessionsParse(client, xlsProfessionsPath);
     }
 
     // PRODUCTION mode
     if (process.env.ENVIRONMENT === "PRODUCTION") {
       const professionsDirectory =
-        process.env.XLS_KATOTG_PATH || "./inputFiles/profXlsx/";
-      serviceLogger.debug(`XLS KATOTG Directory: ${professionsDirectory}`);
+        process.env.XLS_PROFESSION_PATH || "./inputFiles/profXlsx/";
+      serviceLogger.debug(`XLS PROFESSION Directory: ${professionsDirectory}`);
 
-      await xlsProfessionsParse(db, xlsProfessionsPath);
+      await xlsProfessionsParse(client, xlsProfessionsPath);
     }
 
     serviceLogger.info("XLS files parsed and data inserted into the database");

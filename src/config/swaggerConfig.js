@@ -5,9 +5,9 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "PDF Generation API",
+      title: "Professions API",
       version: "1.0.0",
-      description: "API для генерації PDF документів",
+      description: "API для пошуку професій та їх коду",
     },
     servers: [
       {
@@ -21,43 +21,60 @@ const options = {
     ],
     components: {
       schemas: {
-        PdfRequest: {
+        // Схема для пошуку професій
+        ProfessionSearchRequest: {
           type: "object",
           properties: {
-            docName: {
-              type: "array",
-              items: {
-                type: "string",
-              },
-              description: "Назва документу (масив рядків)",
-              minItems: 1,
-              example: ["document1", "document2"],
-            },
-            landscape: {
-              type: "boolean",
-              description: "Чи буде PDF у ландшафтному режимі",
-              example: false,
-            },
-            zip: {
-              type: "boolean",
-              description:
-                "Якщо true, генерується ZIP архів з PDF, HTML та CSS",
-              example: false,
-            },
-            html: {
+            query: {
               type: "string",
-              description: "HTML в форматі encodeURIComponent",
-              example: encodeURIComponent(
-                "<html><body>Document content</body></html>"
-              ),
+              description: "Пошуковий запит по назві або коду професії",
+              example: "інженер",
             },
           },
-          required: ["docName", "html"], // Обов'язкові поля
+          required: ["query"],
+        },
+        Profession: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              description: "Унікальний ідентифікатор професії",
+              example: 1,
+            },
+            code_kp: {
+              type: "string",
+              description: "Код класифікації професії",
+              example: "1234",
+            },
+            name: {
+              type: "string",
+              description: "Назва професії",
+              example: "Інженер",
+            },
+          },
+        },
+      },
+      responses: {
+        ProfessionNotFound: {
+          description: "Професію не знайдено",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  message: {
+                    type: "string",
+                    example: "Професію не знайдено",
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
   },
-  apis: ["../routes/*.js"],
+  apis: ["./src/routes/*.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

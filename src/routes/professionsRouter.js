@@ -3,27 +3,37 @@ import { logRequest } from "../config/logConfig.js";
 import { checkQueryParam } from "../helpers/checkQueryParams.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { profController } from "../controllers/profController.js";
+import { addUuidMiddleware } from "../middlewares/addUuidMiddleware.js";
 
 const professionsRouter = express.Router();
+
+professionsRouter.use(addUuidMiddleware);
 
 professionsRouter.use(logRequest);
 
 /**
  * @swagger
- * /make-pdf:
- *   post:
- *     summary: Генерація PDF документів
- *     description: Генерує PDF документ на основі даних, переданих у запиті.
- *     tags: [PDF Generation]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/PdfRequest'
+ * /search:
+ *   get:
+ *     summary: Пошук професій
+ *     description: Повертає список професій на основі запиту.
+ *     tags: [Professions]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Пошуковий запит для назви або коду професії
  *     responses:
  *       200:
- *         description: Успішна генерація PDF.
+ *         description: Успішний запит. Повертається список професій.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Profession'
  *       400:
  *         description: Помилка валідації даних.
  *       500:

@@ -10,11 +10,12 @@ import { serviceLogger } from "./config/logConfig.js";
 
 const HTTP_PORT = process.env.PORT || 3344;
 const app = express();
+let client;
 
 const startServer = async () => {
   try {
     // створення БД
-    const db = await initializeDatabase();
+    client = await initializeDatabase();
     // парсимо exel
     // Якщо база успішно створена, налаштовуємо сервер
     app.use(morgan("tiny"));
@@ -30,7 +31,7 @@ const startServer = async () => {
     app.use(
       "/api/professions",
       (req, res, next) => {
-        req.db = db;
+        req.client = client;
         next();
       },
       professionsRouter
@@ -61,3 +62,14 @@ const startServer = async () => {
 };
 
 startServer();
+
+process.on("SIGINT", async () => {
+  try {
+    await client.end();
+    console.log("PostgreSQL client disconnected gracefully");
+    process.exit(0);
+  } catch (error) {
+    console.error("Error during disconnection", error);
+    process.exit(1);
+  }
+});

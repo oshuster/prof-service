@@ -1,25 +1,24 @@
-export const searchProfessionService = async (db, query) => {
+import { logError } from "../../config/logError.js";
+import "dotenv/config";
+
+const SCHEMA_NAME = process.env.SCHEMA_NAME || "prof_service";
+
+export const searchProfessionService = async (client, query) => {
   try {
-    // Приведення запиту до нижнього регістру
-    const normalizedQuery = query.toLowerCase();
-
-    console.log("QUERY: ", normalizedQuery);
-
-    // SQL-запит, що використовує LOWER для поля name і code_kp
     const searchQuery = `
       SELECT id, code_kp, name
-      FROM professions
-      WHERE LOWER(code_kp) LIKE ?
-      OR LOWER(name) LIKE ?
+      FROM ${SCHEMA_NAME}.professions
+      WHERE code_kp ILIKE $1
+      OR name ILIKE $2
     `;
 
-    // Пошук для будь-яких збігів з використанням LIKE та %
-    const results = db
-      .prepare(searchQuery)
-      .all(`%${normalizedQuery}%`, `%${normalizedQuery}%`);
+    const results = await client.query(searchQuery, [
+      `%${query}%`,
+      `%${query}%`,
+    ]);
 
     // Форматування результатів
-    const formattedResults = results.map((row) => ({
+    const formattedResults = results.rows.map((row) => ({
       id: row.id,
       code_kp: row.code_kp,
       name: row.name,
@@ -28,15 +27,7 @@ export const searchProfessionService = async (db, query) => {
     return formattedResults;
   } catch (error) {
     console.error("Failed to search professions", error);
+    logError(error, null, "Failed to search professions");
     throw new Error("Failed to search professions");
   }
 };
-
-// Вагар
-// Вагар-обліковець
-// Вагар-обліковець
-// Вагар
-// Контролер-вагар
-// Насипальник-вагар (спеціальні хімічні виробництва)
-// Насипальник-вагар (спеціальні хімічні виробництва)
-// Контролер-вагар

@@ -3,7 +3,7 @@ import { searchProfessionService } from "../services/profServices/searchProfessi
 
 export const profController = async (req, res) => {
   try {
-    const result = await searchProfessionService(req.db, req.query.q);
+    const result = await searchProfessionService(req.client, req.query.q);
 
     res.json(result);
   } catch (error) {
