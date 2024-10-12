@@ -1,0 +1,11 @@
+node_modules/
+logs/
+.env
+.idea
+.vscode
+.DS_Store
+!inputFiles/katotg
+!inputFiles/type
+inputFiles/katotg/*
+inputFiles/type/*
+*.sqlite
