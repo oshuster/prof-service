@@ -29,9 +29,12 @@ export const parseXlsAndSaveToDb = async (client) => {
 
     // PRODUCTION mode
     if (process.env.ENVIRONMENT === "PRODUCTION") {
-      const professionsDirectory =
+      // Присвоюємо xlsProfessionsPath у Production
+      xlsProfessionsPath =
         process.env.XLS_PROFESSION_PATH || "./inputFiles/profXlsx/";
-      serviceLogger.debug(`XLS PROFESSION Directory: ${professionsDirectory}`);
+      serviceLogger.debug(
+        `XLS PROFESSION Directory (Production): ${xlsProfessionsPath}`
+      );
 
       await xlsProfessionsParse(client, xlsProfessionsPath);
     }
