@@ -5,9 +5,11 @@ import HttpError from "../../helpers/HttpError.js";
 import { serviceLogger } from "../../config/logConfig.js";
 import { parseXlsAndSaveToDb } from "../fileParserServices/parseXlsAndSaveToDb.js";
 import { logError } from "../../config/logError.js";
+import { clearDuplicates } from "./clearDublicates.js";
 
 const SCHEMA_NAME = process.env.SCHEMA_NAME || "prof_service";
 const DB_INIT = process.env.DB_INIT || "false";
+const DB_CLEAR = process.env.DB_CLEAR || "false";
 
 console.log("DB_INIT: ", DB_INIT);
 serviceLogger.info(`DB initialize ENABLED: ${DB_INIT}`);
@@ -52,6 +54,10 @@ export const initializeDatabase = async () => {
       serviceLogger.info(
         "Database tables initialized in schema 'prof_service'"
       );
+    }
+
+    if (DB_CLEAR === "true" && DB_INIT !== "true") {
+      clearDuplicates(client);
     }
 
     return client;
