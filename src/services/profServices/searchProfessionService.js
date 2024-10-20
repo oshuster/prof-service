@@ -6,11 +6,11 @@ const SCHEMA_NAME = process.env.SCHEMA_NAME || "prof_service";
 export const searchProfessionService = async (client, query) => {
   try {
     const searchQuery = `
-  SELECT DISTINCT ON (code_kp, name) id, code_kp, name
-  FROM ${SCHEMA_NAME}.professions
-  WHERE code_kp ILIKE $1
-  OR name ILIKE $2
-  ORDER BY code_kp`;
+      SELECT id, code_kp, name
+      FROM ${SCHEMA_NAME}.professions
+      WHERE code_kp ILIKE $1
+      OR name ILIKE $2
+    `;
 
     const results = await client.query(searchQuery, [
       `%${query}%`,
