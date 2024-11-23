@@ -7,7 +7,8 @@ const options = {
     info: {
       title: "Professions API",
       version: "1.0.0",
-      description: "API для пошуку професій та їх коду",
+      description:
+        "API для пошуку, створення, редагування та видалення професій.",
     },
     servers: [
       {
@@ -53,6 +54,27 @@ const options = {
             },
           },
         },
+        EditProfession: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              description: "Унікальний ідентифікатор професії",
+              example: 1,
+            },
+            code_kp: {
+              type: "string",
+              description: "Код класифікації професії",
+              example: "1234",
+            },
+            name: {
+              type: "string",
+              description: "Назва професії",
+              example: "Інженер",
+            },
+          },
+          required: ["id", "code_kp", "name"],
+        },
       },
       responses: {
         ProfessionNotFound: {
@@ -65,6 +87,31 @@ const options = {
                   message: {
                     type: "string",
                     example: "Професію не знайдено",
+                  },
+                },
+              },
+            },
+          },
+        },
+        ValidationError: {
+          description: "Помилка валідації даних",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  errors: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        field: { type: "string", example: "code_kp" },
+                        message: {
+                          type: "string",
+                          example: "Поле 'code_kp' обов'язкове",
+                        },
+                      },
+                    },
                   },
                 },
               },
