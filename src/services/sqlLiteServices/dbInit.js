@@ -13,6 +13,8 @@ const DB_CLEAR = process.env.DB_CLEAR || "false";
 
 console.log("DB_INIT: ", DB_INIT);
 serviceLogger.info(`DB initialize ENABLED: ${DB_INIT}`);
+console.log("DB_CLEAR: ", DB_CLEAR);
+serviceLogger.info(`clear dublicates ENABLED: ${DB_CLEAR}`);
 
 export const initializeDatabase = async () => {
   const client = new Client({
@@ -24,7 +26,9 @@ export const initializeDatabase = async () => {
   });
   try {
     await client.connect();
-    serviceLogger.info("Connected to PostgreSQL database");
+    serviceLogger.info(
+      `Connected to PostgreSQL database: ${process.env.DB_HOST}:${process.env.DB_PORT}\nDB name: ${process.env.DB_DATABASE}`
+    );
 
     // Створюємо схему, якщо вона ще не існує
     const createSchemaQuery = `CREATE SCHEMA IF NOT EXISTS ${SCHEMA_NAME};`;
@@ -57,6 +61,7 @@ export const initializeDatabase = async () => {
     }
 
     if (DB_CLEAR === "true" && DB_INIT !== "true") {
+      serviceLogger.info(`clear dublicates ENABLED: ${DB_CLEAR}`);
       clearDuplicates(client);
     }
 
